@@ -46,3 +46,19 @@ export function build(argv: Pick<Options, 'target' | 'watch' | 'notify' | 'port'
 
   return result;
 }
+
+export function buildComponent(argv: { target: Platform; watch?: boolean; notify?: boolean }) {
+  const { target } = argv;
+
+  process.env.REMAX_PLATFORM = target;
+
+  const options = getConfig();
+
+  output.message(`\n⌨️  Remax v${remaxVersion()}\n`, 'green');
+  output.message(`🎯 平台 ${target}`, 'blue');
+
+  const api = new API();
+  api.registerPlugins(options.plugins);
+
+  return require('./component').default(api, { ...options, ...argv });
+}
