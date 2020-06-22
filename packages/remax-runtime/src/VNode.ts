@@ -55,8 +55,8 @@ export default class VNode {
     this.props = props;
   }
 
-  appendChild(node: VNode, immediately: boolean) {
-    this.removeChild(node, immediately);
+  appendChild(node: VNode) {
+    this.removeChild(node);
     this.size += 1;
 
     node.parent = this;
@@ -73,23 +73,20 @@ export default class VNode {
     this.lastChild = node;
 
     if (this.isMounted()) {
-      this.container.requestUpdate(
-        {
-          type: 'splice',
-          path: this.path,
-          start: node.index,
-          id: node.id,
-          deleteCount: 0,
-          children: this.children,
-          items: [node.toJSON()],
-          node: this,
-        },
-        immediately
-      );
+      this.container.requestUpdate({
+        type: 'splice',
+        path: this.path,
+        start: node.index,
+        id: node.id,
+        deleteCount: 0,
+        children: this.children,
+        items: [node.toJSON()],
+        node: this,
+      });
     }
   }
 
-  removeChild(node: VNode, immediately: boolean) {
+  removeChild(node: VNode) {
     const { previousSibling, nextSibling } = node;
 
     if (node.parent !== this) {
@@ -120,24 +117,21 @@ export default class VNode {
     node.deleted = true;
 
     if (this.isMounted()) {
-      this.container.requestUpdate(
-        {
-          type: 'splice',
-          path: this.path,
-          start: index,
-          id: node.id,
-          deleteCount: 1,
-          children: this.children,
-          items: [],
-          node: this,
-        },
-        immediately
-      );
+      this.container.requestUpdate({
+        type: 'splice',
+        path: this.path,
+        start: index,
+        id: node.id,
+        deleteCount: 1,
+        children: this.children,
+        items: [],
+        node: this,
+      });
     }
   }
 
-  insertBefore(node: VNode, referenceNode: VNode, immediately: boolean) {
-    this.removeChild(node, immediately);
+  insertBefore(node: VNode, referenceNode: VNode) {
+    this.removeChild(node);
     this.size += 1;
 
     node.parent = this;
@@ -155,19 +149,16 @@ export default class VNode {
     node.nextSibling = referenceNode;
 
     if (this.isMounted()) {
-      this.container.requestUpdate(
-        {
-          type: 'splice',
-          path: this.path,
-          start: node.index,
-          id: node.id,
-          deleteCount: 0,
-          children: this.children,
-          items: [node.toJSON()],
-          node: this,
-        },
-        immediately
-      );
+      this.container.requestUpdate({
+        type: 'splice',
+        path: this.path,
+        start: node.index,
+        id: node.id,
+        deleteCount: 0,
+        children: this.children,
+        items: [node.toJSON()],
+        node: this,
+      });
     }
   }
 

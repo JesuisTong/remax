@@ -41,16 +41,8 @@ export default class Container {
     this.root.mounted = true;
   }
 
-  requestUpdate(update: SpliceUpdate | SetUpdate, immediately?: boolean) {
-    if (immediately) {
-      this.updateQueue.push(update);
-      this.applyUpdate();
-    } else {
-      if (this.updateQueue.length === 0) {
-        Promise.resolve().then(() => this.applyUpdate());
-      }
-      this.updateQueue.push(update);
-    }
+  requestUpdate(update: SpliceUpdate | SetUpdate) {
+    this.updateQueue.push(update);
   }
 
   applyUpdate() {
@@ -143,14 +135,14 @@ export default class Container {
   }
 
   appendChild(child: VNode) {
-    this.root.appendChild(child, true);
+    this.root.appendChild(child);
   }
 
   removeChild(child: VNode) {
-    this.root.removeChild(child, true);
+    this.root.removeChild(child);
   }
 
   insertBefore(child: VNode, beforeChild: VNode) {
-    this.root.insertBefore(child, beforeChild, true);
+    this.root.insertBefore(child, beforeChild);
   }
 }
